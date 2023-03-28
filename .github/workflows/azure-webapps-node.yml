@@ -76,15 +76,10 @@ jobs:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
         publish-profile: ${{ secrets.NGADISEC }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-  build:
-    runs-on: self-hosted    
-    defaults:
-       run:
-         working-directory: ./server/
-    strategy:
-       matrix:
-       node-version: [14.x]
-       with:
-  node-version: ${{ matrix.node-version }}
-    cache: 'npm'
-    cache-dependency-path: './server/package-lock.json'
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 16
+    - run: npm ci
+    - run: npm test
